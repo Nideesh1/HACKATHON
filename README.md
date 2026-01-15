@@ -4,7 +4,7 @@ A fully local, privacy-first voice assistant with RAG (Retrieval-Augmented Gener
 
 ## Demo
 
-
+[![Watch Demo](https://img.youtube.com/vi/LsLFA4zvKog/maxresdefault.jpg)](https://youtu.be/LsLFA4zvKog)
 
 ## Features
 
