@@ -1,4 +1,17 @@
-/backend/app/__pycache__
-/backend/app/models/__pycache__
-/backend/app/routers/__pycache__
-/backend/app/services/__pycache__
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+
+# Environment variables (contains secrets)
+.env
+!.env.example
+
+# Downloaded models and data
+/backend/data/
+
+# IDE
+.idea/
+.vscode/
+*.swp

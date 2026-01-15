@@ -182,6 +182,9 @@ function Dashboard() {
               break
             case 'transcription':
               setTranscription(data.data.text)
+              setAnswer('')  // Clear old answer while processing
+              setChunks([])
+              setResultType(null)
               setStatus('Processing...')
               break
             case 'request_screenshot':

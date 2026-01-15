@@ -20,6 +20,14 @@ async def lifespan(app: FastAPI):
     from app.services.document_service import get_chunker
     get_chunker()
 
+    # Load LLM (Gemma 3 GGUF) - downloads on first run
+    from app.services.llm_service import get_llm_service
+    get_llm_service()._ensure_loaded()
+
+    # Load router model (FunctionGemma) - downloads on first run
+    from app.services.router_service import get_router_service
+    get_router_service()._ensure_loaded()
+
     print("All models loaded successfully!")
     yield
     print("Shutting down...")
@@ -72,5 +80,5 @@ async def health():
     return {
         "status": "healthy" if llm_ok else "degraded",
         "index_size": get_embedding_service().get_index_size(),
-        "ollama": "connected" if llm_ok else "disconnected",
+        "llm": "loaded" if llm_ok else "not loaded",
     }

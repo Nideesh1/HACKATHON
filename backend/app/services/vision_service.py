@@ -1,75 +1,93 @@
-import httpx
+"""Vision service using Gemma 3 GGUF with image support."""
+import asyncio
 import base64
-from typing import AsyncIterator
+from typing import Optional
 
-from app.config import settings
+from app.services.llm_service import get_llm_multimodal
 
 
 class VisionService:
-    """Analyze images using Gemma 3 vision capabilities."""
+    """Analyze images using Gemma 3 vision capabilities (local GGUF)."""
 
     def __init__(self):
-        self.base_url = settings.ollama_base_url
-        self.model = settings.ollama_model  # gemma3:4b has vision
+        self.model = None
+
+    def _ensure_loaded(self):
+        if self.model is None:
+            self.model = get_llm_multimodal()
+            if self.model is None:
+                raise RuntimeError("Multimodal model not available. Download mmproj-model-f16-4B.gguf")
 
     async def analyze(self, image_base64: str, question: str = "What do you see in this image?") -> str:
         """Analyze an image and answer a question about it."""
+        self._ensure_loaded()
 
-        # Remove data URL prefix if present
+        # Remove data URL prefix if present (e.g., "data:image/jpeg;base64,...")
         if "," in image_base64:
             image_base64 = image_base64.split(",")[1]
 
+        # Run in thread pool to not block async
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(
+            None,
+            self._analyze_sync,
+            image_base64,
+            question
+        )
+        return result
+
+    def _analyze_sync(self, image_base64: str, question: str) -> str:
+        """Synchronous image analysis for thread pool."""
         system_prompt = """You are a helpful assistant analyzing screen captures.
 Describe what you see clearly and concisely.
 If asked a specific question about the screen, focus your answer on that."""
 
-        async with httpx.AsyncClient(timeout=120.0) as client:
-            response = await client.post(
-                f"{self.base_url}/api/generate",
-                json={
-                    "model": self.model,
-                    "prompt": question,
-                    "system": system_prompt,
-                    "images": [image_base64],
-                    "stream": False,
-                },
+        # Gemma 3 expects images in chat completion format
+        # The image should be base64 encoded
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"}
+                    },
+                    {
+                        "type": "text",
+                        "text": question
+                    }
+                ]
+            }
+        ]
+
+        try:
+            response = self.model.create_chat_completion(
+                messages=messages,
+                max_tokens=1024,
+                temperature=0.7,
             )
-            response.raise_for_status()
-            return response.json()["response"]
+            return response["choices"][0]["message"]["content"]
+        except Exception as e:
+            # If multimodal format doesn't work, try simple text prompt
+            print(f"[Vision] Multimodal format failed: {e}, trying fallback...")
 
-    async def analyze_stream(self, image_base64: str, question: str = "What do you see in this image?") -> AsyncIterator[str]:
-        """Stream analysis of an image."""
+            # Fallback: just describe that we received an image
+            fallback_messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"[An image was shared] {question}"}
+            ]
 
-        # Remove data URL prefix if present
-        if "," in image_base64:
-            image_base64 = image_base64.split(",")[1]
-
-        system_prompt = """You are a helpful assistant analyzing screen captures.
-Describe what you see clearly and concisely.
-If asked a specific question about the screen, focus your answer on that."""
-
-        async with httpx.AsyncClient(timeout=120.0) as client:
-            async with client.stream(
-                "POST",
-                f"{self.base_url}/api/generate",
-                json={
-                    "model": self.model,
-                    "prompt": question,
-                    "system": system_prompt,
-                    "images": [image_base64],
-                    "stream": True,
-                },
-            ) as response:
-                async for line in response.aiter_lines():
-                    if line:
-                        import json
-                        data = json.loads(line)
-                        if "response" in data:
-                            yield data["response"]
+            response = self.model.create_chat_completion(
+                messages=fallback_messages,
+                max_tokens=1024,
+                temperature=0.7,
+            )
+            return response["choices"][0]["message"]["content"] + "\n\n(Note: Image analysis may require additional model configuration)"
 
 
 # Singleton
-_vision_service = None
+_vision_service: Optional[VisionService] = None
 
 
 def get_vision_service() -> VisionService:

@@ -9,7 +9,8 @@ A fully local, privacy-first voice assistant with RAG (Retrieval-Augmented Gener
 - **Screen Analysis**: Say "look at my screen" and the AI analyzes what you're viewing
 - **General Chat**: Normal conversation, math, questions - routes intelligently
 - **Continuous Conversation**: Speaks answers back and auto-restarts listening
-- **100% Local & Private**: All models run locally via Ollama - your data never leaves your machine
+- **100% Local & Private**: All models run locally from HuggingFace - your data never leaves your machine
+- **No Ollama Required**: Uses HuggingFace models directly via llama-cpp-python
 
 ## Tech Stack
 
@@ -18,7 +19,8 @@ A fully local, privacy-first voice assistant with RAG (Retrieval-Augmented Gener
 - **Sentence Transformers** - Document embeddings
 - **FAISS** - Vector similarity search
 - **Chonkie** - Neural chunking for intelligent document splitting
-- **Ollama** - Local LLM inference (Gemma 3, FunctionGemma)
+- **Gemma 3 4B** (GGUF) - Local LLM for chat, RAG, and vision
+- **FunctionGemma** - Intent routing/function calling
 
 ### Frontend (React/Vite)
 - WebSocket for real-time voice streaming
@@ -30,72 +32,62 @@ A fully local, privacy-first voice assistant with RAG (Retrieval-Augmented Gener
 
 - **Python 3.10+** (recommend using [uv](https://github.com/astral-sh/uv))
 - **Node.js 18+**
-- **Ollama** ([Install Ollama](https://ollama.ai))
+- **~3GB disk space** for AI models (downloaded automatically on first run)
 
 ## Setup
 
-### 1. Install Ollama
+### 1. Install uv (Python package manager)
 
-**macOS:**
+**macOS/Linux:**
 ```bash
-brew install ollama
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 **Windows:**
-Download and run the installer from https://ollama.ai/download/windows
-
-**Linux:**
-```bash
-curl -fsSL https://ollama.ai/install.sh | sh
+```powershell
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-Start the Ollama service:
-```bash
-# macOS/Linux
-ollama serve
-
-# Windows: Ollama runs automatically after installation (check system tray)
-```
-
-### 2. Pull Required Models
-
-```bash
-# Main LLM for chat and RAG (4B parameters, good balance of speed/quality)
-ollama pull gemma3:4b
-
-# Function routing model (270M parameters, very fast)
-ollama pull functiongemma
-```
-
-### 3. Backend Setup
+### 2. Backend Setup
 
 ```bash
 cd backend
 
-# Using uv (recommended - handles everything automatically)
+# Install dependencies (handles everything automatically)
 uv sync
-
-# Or using pip
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -e .
 ```
 
-### 4. Frontend Setup
+### 3. Frontend Setup
 
 ```bash
 cd frontend
 npm install
 ```
 
-## Running the App
+### 4. HuggingFace Access (Required for Gemma models)
 
-### Terminal 1: Start Ollama (if not running)
+Gemma models require accepting Google's license and setting up a token:
+
+1. Create a HuggingFace account at https://huggingface.co
+2. Go to https://huggingface.co/google/gemma-3-4b-it-qat-q4_0-gguf and click "Agree and access repository"
+3. Go to https://huggingface.co/google/functiongemma-270m-it and click "Agree and access repository"
+4. Create an access token at https://huggingface.co/settings/tokens (select "Read" permission)
+5. Set up your token in the backend:
+
 ```bash
-ollama serve
+cd backend
+cp .env.example .env
+# Edit .env and replace 'your_huggingface_token_here' with your actual token
 ```
 
-### Terminal 2: Start Backend
+Your `.env` file should look like:
+```
+HF_TOKEN=hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+## Running the App
+
+### Terminal 1: Start Backend
 ```bash
 cd backend
 
@@ -106,7 +98,11 @@ OMP_NUM_THREADS=1 uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 800
 uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### Terminal 3: Start Frontend
+**First run will download models (~3GB total):**
+- Gemma 3 4B GGUF (~2.5GB) - for chat, RAG, and vision
+- FunctionGemma 270M (~500MB) - for intent routing
+
+### Terminal 2: Start Frontend
 ```bash
 cd frontend
 npm run dev
@@ -147,6 +143,7 @@ Open http://localhost:5173 in your browser.
 
 ```
 ├── backend/
+│   ├── .env.example             # HuggingFace token template
 │   ├── app/
 │   │   ├── main.py              # FastAPI app
 │   │   ├── config.py            # Settings
@@ -159,9 +156,10 @@ Open http://localhost:5173 in your browser.
 │   │       ├── embedding_service.py  # Vector embeddings
 │   │       ├── document_service.py   # Chunking & indexing
 │   │       ├── rag_service.py        # RAG pipeline
-│   │       ├── llm_service.py        # Ollama LLM
-│   │       ├── router_service.py     # Intent routing
-│   │       └── vision_service.py     # Screen analysis
+│   │       ├── llm_service.py        # Gemma 3 GGUF inference
+│   │       ├── router_service.py     # FunctionGemma routing
+│   │       ├── vision_service.py     # Screen analysis
+│   │       └── model_downloader.py   # HuggingFace model download
 │   └── pyproject.toml
 ├── frontend/
 │   ├── src/
@@ -174,29 +172,35 @@ Open http://localhost:5173 in your browser.
 └── README.md
 ```
 
+## Models Used
+
+| Model | Size | Purpose | Source |
+|-------|------|---------|--------|
+| Gemma 3 4B (GGUF Q4) | ~2.5GB | Chat, RAG, Vision | [google/gemma-3-4b-it-qat-q4_0-gguf](https://huggingface.co/google/gemma-3-4b-it-qat-q4_0-gguf) |
+| FunctionGemma 270M | ~500MB | Intent routing | [google/functiongemma-270m-it](https://huggingface.co/google/functiongemma-270m-it) |
+| Whisper Base | ~150MB | Speech-to-text | faster-whisper |
+| all-MiniLM-L6-v2 | ~90MB | Document embeddings | sentence-transformers |
+
 ## Privacy & Security
 
 This application is designed with privacy as a core principle:
 
-- **100% Local Processing**: All AI models run on your machine via Ollama
+- **100% Local Processing**: All AI models run on your machine
 - **No Cloud Services**: No API keys, no external calls, no telemetry
+- **No Ollama Required**: Direct HuggingFace model loading
 - **Open Source**: Full source code available for audit
 - **Your Data Stays Yours**: Documents and conversations never leave your computer
 
 ## Troubleshooting
 
-### "Ollama connection failed"
-Make sure Ollama is running: `ollama serve`
-
-### Models not found
-Pull the required models:
-```bash
-ollama pull gemma3:4b
-ollama pull functiongemma
-```
+### "Model download failed" or "Access denied"
+Make sure you:
+1. Accepted the Gemma license on HuggingFace (both models)
+2. Created a valid HuggingFace token with "Read" permission
+3. Set `HF_TOKEN` in `backend/.env` file
 
 ### OpenMP crash on macOS (Apple Silicon)
-Run with: `OMP_NUM_THREADS=1 uvicorn ...`
+Run with: `OMP_NUM_THREADS=1 uv run uvicorn ...`
 
 ### Screen sharing not working
 - Make sure you're using HTTPS or localhost
@@ -205,6 +209,21 @@ Run with: `OMP_NUM_THREADS=1 uvicorn ...`
 ### Microphone not working
 - Check browser permissions for microphone access
 - Try a different browser (Chrome/Edge recommended)
+
+### Out of memory
+- The 4B model needs ~4GB RAM
+- Close other applications
+- Try reducing `llm_context_size` in config.py
+
+## Configuration
+
+Environment variables (prefix with `RAG_`):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `RAG_LLM_THREADS` | 4 | CPU threads for inference |
+| `RAG_LLM_CONTEXT_SIZE` | 4096 | Max context window |
+| `RAG_TOP_K` | 5 | Number of chunks to retrieve |
 
 ## License
 
