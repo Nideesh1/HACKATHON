@@ -1,0 +1,129 @@
+MEDICAL CLAIMS RECORD - BATCH 2024-Q4
+
+CLAIM ID: CLM-2024-78432
+Patient: John Smith (DOB: 03/15/1978)
+Provider: Metro General Hospital
+Service Date: 10/15/2024
+Diagnosis Code: J18.9 (Pneumonia, unspecified)
+Procedure: Chest X-ray, IV antibiotics administration
+Billed Amount: $4,250.00
+Approved Amount: $3,800.00
+Status: APPROVED
+Notes: 3-day inpatient stay, discharged in stable condition.
+
+
+
+CLAIM ID: CLM-2024-78455
+Patient: Maria Garcia (DOB: 07/22/1985)
+Provider: Sunrise Family Clinic
+Service Date: 10/18/2024
+Diagnosis Code: M54.5 (Low back pain)
+Procedure: Physical therapy evaluation, lumbar MRI
+Billed Amount: $2,100.00
+Approved Amount: $1,850.00
+Status: APPROVED
+Notes: Referred for 6 weeks of physical therapy.
+
+
+
+CLAIM ID: CLM-2024-78501
+Patient: Robert Johnson (DOB: 11/30/1962)
+Provider: CardioHealth Specialists
+Service Date: 10/20/2024
+Diagnosis Code: I25.10 (Atherosclerotic heart disease)
+Procedure: Cardiac stress test, echocardiogram
+Billed Amount: $3,750.00
+Approved Amount: $0.00
+Status: DENIED
+Denial Reason: Prior authorization not obtained. Patient must resubmit with PA approval.
+
+
+
+CLAIM ID: CLM-2024-78523
+Patient: Sarah Williams (DOB: 04/08/1990)
+Provider: Women's Health Center
+Service Date: 10/22/2024
+Diagnosis Code: Z12.31 (Screening mammogram)
+Procedure: Bilateral screening mammography
+Billed Amount: $450.00
+Approved Amount: $450.00
+Status: APPROVED
+Notes: Routine preventive screening, no abnormalities detected.
+
+
+
+CLAIM ID: CLM-2024-78567
+Patient: Michael Chen (DOB: 09/14/1975)
+Provider: Orthopedic Associates
+Service Date: 10/25/2024
+Diagnosis Code: S82.001A (Fracture of right tibia)
+Procedure: Closed reduction, casting, follow-up X-ray
+Billed Amount: $5,200.00
+Approved Amount: $4,800.00
+Status: APPROVED
+Notes: Work-related injury, workers comp case.
+
+
+
+CLAIM ID: CLM-2024-78599
+Patient: Emily Davis (DOB: 12/03/1988)
+Provider: ClearView Dermatology
+Service Date: 10/28/2024
+Diagnosis Code: L70.0 (Acne vulgaris)
+Procedure: Dermatology consultation, prescription for isotretinoin
+Billed Amount: $320.00
+Approved Amount: $0.00
+Status: DENIED
+Denial Reason: Cosmetic treatment not covered under plan benefits.
+
+
+
+CLAIM ID: CLM-2024-78612
+Patient: David Martinez (DOB: 06/19/1970)
+Provider: Metro General Hospital - ER
+Service Date: 10/30/2024
+Diagnosis Code: K35.80 (Acute appendicitis)
+Procedure: Emergency appendectomy, laparoscopic
+Billed Amount: $28,500.00
+Approved Amount: $24,200.00
+Status: APPROVED
+Notes: Emergency surgery, 2-day post-op recovery, discharged without complications.
+
+
+
+CLAIM ID: CLM-2024-78645
+Patient: Jennifer Lee (DOB: 02/28/1995)
+Provider: MindWell Behavioral Health
+Service Date: 11/01/2024
+Diagnosis Code: F32.1 (Major depressive disorder, moderate)
+Procedure: Psychiatric evaluation, medication management
+Billed Amount: $275.00
+Approved Amount: $275.00
+Status: APPROVED
+Notes: Initial evaluation, started on SSRI medication.
+
+
+
+CLAIM ID: CLM-2024-78678
+Patient: Thomas Brown (DOB: 08/11/1958)
+Provider: Valley Endocrinology
+Service Date: 11/03/2024
+Diagnosis Code: E11.9 (Type 2 diabetes mellitus)
+Procedure: HbA1c test, diabetic foot exam, insulin adjustment
+Billed Amount: $380.00
+Approved Amount: $380.00
+Status: APPROVED
+Notes: Quarterly diabetes management visit, A1c improved to 7.2%.
+
+
+
+CLAIM ID: CLM-2024-78701
+Patient: Amanda Wilson (DOB: 05/25/1982)
+Provider: Premier Imaging Center
+Service Date: 11/05/2024
+Diagnosis Code: R10.9 (Abdominal pain, unspecified)
+Procedure: Abdominal CT scan with contrast
+Billed Amount: $1,850.00
+Approved Amount: $0.00
+Status: PENDING REVIEW
+Notes: Under medical review - requesting additional documentation for medical necessity.

@@ -1,0 +1,77 @@
+MEDICAL CLAIMS RECORD - BATCH 2023-Q4
+
+CLAIM ID: CLM-2023-65102
+Patient: Angela Torres (DOB: 05/12/1980)
+Provider: City Medical Center
+Service Date: 11/10/2023
+Diagnosis Code: J06.9 (Acute upper respiratory infection)
+Procedure: Office visit, rapid strep test, prescription antibiotics
+Billed Amount: $185.00
+Approved Amount: $185.00
+Status: APPROVED
+Notes: Routine sick visit, strep negative, viral infection diagnosed.
+
+
+
+CLAIM ID: CLM-2023-65234
+Patient: Kevin O'Brien (DOB: 08/25/1955)
+Provider: Advanced Spine Institute
+Service Date: 11/15/2023
+Diagnosis Code: M47.816 (Cervical spondylosis)
+Procedure: Cervical epidural steroid injection
+Billed Amount: $4,500.00
+Approved Amount: $0.00
+Status: DENIED
+Denial Reason: Maximum annual benefit for spinal injections exceeded. Patient has already received 3 injections this year.
+
+
+
+CLAIM ID: CLM-2023-65301
+Patient: Lisa Park (DOB: 02/14/1992)
+Provider: FertilityCare Clinic
+Service Date: 11/18/2023
+Diagnosis Code: N97.0 (Female infertility associated with anovulation)
+Procedure: IVF cycle - egg retrieval and embryo transfer
+Billed Amount: $15,000.00
+Approved Amount: $0.00
+Status: DENIED
+Denial Reason: Infertility treatment not covered under current plan. Patient may appeal with documentation of medical necessity.
+
+
+
+CLAIM ID: CLM-2023-65412
+Patient: Marcus Johnson (DOB: 09/30/1968)
+Provider: Sleep Wellness Center
+Service Date: 11/22/2023
+Diagnosis Code: G47.33 (Obstructive sleep apnea)
+Procedure: Overnight polysomnography (sleep study)
+Billed Amount: $2,800.00
+Approved Amount: $2,400.00
+Status: APPROVED
+Notes: Confirmed severe OSA, AHI of 42. CPAP therapy recommended.
+
+
+
+CLAIM ID: CLM-2023-65523
+Patient: Rachel Green (DOB: 11/05/1987)
+Provider: Metro General Hospital - ER
+Service Date: 11/25/2023
+Diagnosis Code: S52.501A (Fracture of lower end of radius)
+Procedure: Emergency room visit, X-ray, closed reduction, splinting
+Billed Amount: $3,200.00
+Approved Amount: $2,900.00
+Status: APPROVED
+Notes: Fall injury, non-displaced fracture, follow-up with orthopedics scheduled.
+
+
+
+CLAIM ID: CLM-2023-65678
+Patient: William Chen (DOB: 04/18/1972)
+Provider: Elite Plastic Surgery
+Service Date: 11/28/2023
+Diagnosis Code: L90.5 (Scar conditions)
+Procedure: Scar revision surgery - facial
+Billed Amount: $8,500.00
+Approved Amount: $0.00
+Status: DENIED
+Denial Reason: Cosmetic procedure not medically necessary. No functional impairment documented.
