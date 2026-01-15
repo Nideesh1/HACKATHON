@@ -2,6 +2,10 @@
 
 A fully local, privacy-first voice assistant with RAG (Retrieval-Augmented Generation) and screen analysis capabilities. Everything runs on your machine - no data leaves your computer.
 
+## Demo
+
+
+
 ## Features
 
 - **Voice Interface**: Click to speak, silence detection auto-sends when you stop talking
